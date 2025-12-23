@@ -449,8 +449,8 @@ go tool cover -html=coverage.out -o coverage.html
 
 <img width="979" height="1125" alt="image" src="https://github.com/user-attachments/assets/c23d563d-d87c-498c-89b8-a8482af8b399" /> 
 
-HTML-отчёт позволяет визуально оценить покрытие отдельных функций и ветвлений.
-Запуск бенчмарков
+HTML-отчёт позволяет визуально оценить покрытие отдельных функций и ветвлений. 
+Запуск бенчмарков 
 Для оценки производительности отдельных функций реализованы бенчмарки в пакете internal/mathx.
 ```bash
 go test -bench=. -benchmem ./internal/mathx 
