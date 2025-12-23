@@ -1,20 +1,64 @@
-# Notes API — Практическое занятие №14 (PostgreSQL, pool, оптимизация запросов)
-
-Этот проект — минимальный REST API на Go для работы с заметками (CRUD) с хранением данных в PostgreSQL.
-Сделан под требования ПЗ-14: connection pool, индексы, keyset-пагинация, батчинг ANY($1), prepared statements,
-транзакции, команды для EXPLAIN/ANALYZE и нагрузочных тестов.
+# Практическое задание 14
+## Шишков А.Д. ЭФМО-02-22
+## Тема
+Unit-тестирование функций (testing, testify)
+## Цели
+- Освоить базовые приёмы unit-тестирования в Go с помощью стандартного пакета testing.
+- Научиться писать табличные тесты, подзадачи t.Run, тестировать ошибки и паники.
+- Освоить библиотеку утверждений testify (assert, require) для лаконичных проверок.
+- Научиться измерять покрытие кода (go test -cover) и формировать html-отчёт покрытия.
+- Подготовить минимальную структуру проектных тестов и общий чек-лист качества тестов.
 
 ## Структура проекта
 
 ```text
-notes-api-pz14/
-  cmd/api/main.go            # запуск HTTP сервера
-  internal/config/config.go  # чтение env
-  internal/db/db.go          # подключение к PostgreSQL + pool
-  internal/notes/            # модели, repository (SQL), handlers, маршруты
-  migrations/001_init.sql    # таблицы + индексы
-  scripts/explain.sql        # примеры EXPLAIN (ANALYZE, BUFFERS)
-  .env.example               # пример переменных окружения
+.
+├── cmd/
+│   └── api/
+│       └── main.go              # Точка входа приложения (HTTP-сервер)
+│
+├── docs/
+│   ├── docs.go                  # Сгенерированный Swagger-код
+│   ├── swagger.json             # Swagger спецификация (JSON)
+│   └── swagger.yaml             # Swagger спецификация (YAML)
+│
+├── internal/
+│   ├── config/
+│   │   ├── config.go            # Загрузка конфигурации из env
+│   │   └── config_test.go       # Unit-тесты конфигурации
+│   │
+│   ├── db/
+│   │   └── postgres.go          # Подключение к PostgreSQL и пул соединений
+│   │
+│   ├── notes/
+│   │   ├── handlers.go          # HTTP-обработчики REST API
+│   │   ├── repository.go        # Репозиторий заметок (PostgreSQL)
+│   │   └── handlers_test.go     # Тесты HTTP-логики (handlers)
+│   │
+│   ├── mathx/
+│   │   ├── mathx.go             # Математические функции
+│   │   ├── mathx_test.go        # Unit-тесты
+│   │   └── mathx_bench_test.go  # Бенчмарки
+│   │
+│   ├── stringsx/
+│   │   ├── stringsx.go          # Утилиты для строк
+│   │   └── stringsx_test.go     # Unit-тесты
+│   │
+│   └── service/
+│       ├── service.go           # Бизнес-логика сервиса
+│       └── service_test.go      # Unit-тесты бизнес-логики
+│
+├── migrations/
+│   └── 001_init.sql             # SQL-миграция (таблицы и индексы)
+│
+├── scripts/
+│   └── load_test.sh             # Скрипты для нагрузочного тестирования
+│
+├── .env.example                 # Пример файла переменных окружения
+├── go.mod                       # Go-модуль
+├── go.sum                       # Зависимости
+└── README.md                    # Документация проекта
+
 ```
 
 ## 1) Подготовка PostgreSQL (на сервере)
